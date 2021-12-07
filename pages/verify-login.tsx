@@ -1,27 +1,28 @@
-import LoginForm from "components/LoginForm";
+import VerifyLoginForm from "components/VerifyLoginForm";
 import BlankLayout from "layouts/BlankLayout";
 import { ReactElement, useState } from "react";
 import fetchJson, { FetchError } from "lib/fetchJson";
-import { useRouter } from "next/router";
 
 export default function Login() {
   const [errorMsg, setErrorMsg] = useState("");
-  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const body = {
-      phone: event.currentTarget.phone.value,
+      otp: event.currentTarget.otp.value,
     };
 
     try {
-      const response = await fetchJson("/api/send-message", {
+      const response = await fetchJson("/api/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      router.push("/verify-login");
+      console.log(
+        "🚀 ~ file: verify-login.tsx ~ line 22 ~ handleSubmit ~ response",
+        response
+      );
     } catch (error) {
       if (error instanceof FetchError) {
         setErrorMsg(error.data.message);
@@ -34,7 +35,7 @@ export default function Login() {
   return (
     <>
       <div className="login">
-        <LoginForm errorMessage={errorMsg} onSubmit={handleSubmit} />
+        <VerifyLoginForm errorMessage={errorMsg} onSubmit={handleSubmit} />
       </div>
       <style jsx>{`
         .login {

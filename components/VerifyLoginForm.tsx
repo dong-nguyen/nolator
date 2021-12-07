@@ -1,7 +1,7 @@
 import { FormEvent } from "react";
 import Link from "next/link";
 
-export default function Form({
+export default function VerifyLoginForm({
   errorMessage,
   onSubmit,
 }: {
@@ -11,11 +11,11 @@ export default function Form({
   return (
     <form onSubmit={onSubmit}>
       <label>
-        <span>Type your phone number</span>
-        <input type="text" name="phone" required />
+        <span>Type OTP</span>
+        <input type="text" name="otp" required />
       </label>
 
-      <button type="submit">Login</button>
+      <button type="submit">Submit</button>
 
       {errorMessage && <p className="error">{errorMessage}</p>}
       <div className="back">
