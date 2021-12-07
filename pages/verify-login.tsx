@@ -2,9 +2,16 @@ import VerifyLoginForm from "components/VerifyLoginForm";
 import BlankLayout from "layouts/BlankLayout";
 import { ReactElement, useState } from "react";
 import fetchJson, { FetchError } from "lib/fetchJson";
+import { useRouter } from "next/router";
+import useUser from "lib/useUser";
 
 export default function Login() {
   const [errorMsg, setErrorMsg] = useState("");
+  const router = useRouter();
+  const { mutateUser } = useUser({
+    redirectTo: "/profile",
+    redirectIfFound: true,
+  });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -14,15 +21,15 @@ export default function Login() {
     };
 
     try {
-      const response = await fetchJson("/api/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      console.log(
-        "🚀 ~ file: verify-login.tsx ~ line 22 ~ handleSubmit ~ response",
-        response
+      mutateUser(
+        await fetchJson("/api/send-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        })
       );
+
+      router.push("/profile");
     } catch (error) {
       if (error instanceof FetchError) {
         setErrorMsg(error.data.message);

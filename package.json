@@ -14,6 +14,7 @@
     "node-cache": "^5.1.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "swr": "^1.1.0",
     "twilio": "^3.71.2"
   },
   "devDependencies": {

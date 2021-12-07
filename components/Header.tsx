@@ -1,11 +1,19 @@
 import Link from "next/link";
-// import useUser from "lib/useUser";
+import useUser from "lib/useUser";
 import { useRouter } from "next/router";
-import Image from "next/image";
-// import fetchJson from "lib/fetchJson";
+import fetchJson from "lib/fetchJson";
+import { MouseEvent } from "react";
 
 export default function Header() {
-  const user = { isLoggedIn: false };
+  const { user, mutateUser } = useUser();
+  const router = useRouter();
+
+  const handleLogout = async (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    mutateUser(await fetchJson("/api/logout", { method: "POST" }), false);
+    router.push("/login");
+  };
+
   return (
     <header>
       <nav>
@@ -15,17 +23,23 @@ export default function Header() {
               <a>Home</a>
             </Link>
           </li>
-          {user?.isLoggedIn === false && (
+          {!user?.isLoggedIn ? (
             <li>
               <Link href="/login">
                 <a>Login</a>
               </Link>
             </li>
-          )}
-          {user?.isLoggedIn === true && (
+          ) : (
             <>
               <li>
-                <a href="/api/logout">Logout</a>
+                <Link href="/profile">
+                  <a>Profile</a>
+                </Link>
+              </li>
+              <li>
+                <a href="/api/logout" onClick={handleLogout}>
+                  Logout
+                </a>
               </li>
             </>
           )}

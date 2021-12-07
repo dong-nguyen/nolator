@@ -3,7 +3,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { sessionOptions } from "lib/session";
 import twilio from "twilio";
 import random from "lodash/random";
-import { CacheManager } from "lib/cache";
 
 export default withIronSessionApiRoute(sendMessageRoute, sessionOptions);
 

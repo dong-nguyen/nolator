@@ -10,9 +10,16 @@ export async function sendMessageRoute(
 ) {
   const { phone, otp: cachedOTP } = req.session.user || {};
 
-  if (!phone || !cachedOTP || req.body?.otp !== cachedOTP) {
-    res.status(500).json({ message: "Session expired!" });
+  if (!phone || !cachedOTP) {
+    req.session.destroy();
+    return res.status(500).json({ message: "Session expired!" });
   }
 
-  res.status(200).json({ ...req.session.user, isLoggedIn: true });
+  if (req.body?.otp !== cachedOTP) {
+    return res.status(500).json({ message: "Invalid Code!" });
+  }
+
+  req.session.user = { isLoggedIn: true, phone };
+  await req.session.save();
+  return res.status(200).json({ ...req.session.user, isLoggedIn: true });
 }
