@@ -8,7 +8,7 @@ export default function Header() {
   const { user, mutateUser } = useUser();
   const router = useRouter();
 
-  const handleLogout = async (e: MouseEvent<HTMLAnchorElement>) => {
+  const handleLogout = async (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     mutateUser(await fetchJson("/api/logout", { method: "POST" }), false);
     router.push("/login");
@@ -37,9 +37,9 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <a href="/api/logout" onClick={handleLogout}>
+                <div onClick={handleLogout}>
                   Logout
-                </a>
+                </div>
               </li>
             </>
           )}
